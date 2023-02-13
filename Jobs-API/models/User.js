@@ -1,6 +1,8 @@
 // User Schema
 const mongoose = require('mongoose');
 
+const bcrypt = require('bcryptjs');
+
 const UserSchema = new mongoose.Schema({
   // Check mongoose doc
   name: {
@@ -23,6 +25,15 @@ const UserSchema = new mongoose.Schema({
     required: [true, '請提供密碼'],
     minLength: 6,
   },
+});
+
+// Mongoose middleware
+// 將原本寫在 controller 中的加密功能移到這裡
+UserSchema.pre('save', async function () {
+  const salt = await bcrypt.genSalt(10);
+
+  // this 指向該筆 document
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 module.exports = mongoose.model('User', UserSchema);
