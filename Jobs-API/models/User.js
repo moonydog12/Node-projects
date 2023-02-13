@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const UserSchema = new mongoose.Schema({
   // Check mongoose doc
@@ -35,5 +36,13 @@ UserSchema.pre('save', async function () {
   // this 指向該筆 document
   this.password = await bcrypt.hash(this.password, salt);
 });
+
+UserSchema.methods.createJWT = function () {
+  // generate token
+  const token = jwt.sign({ userId: this._id, name: this.name }, 'jwtSecret', {
+    expiresIn: '30d',
+  });
+  return token;
+};
 
 module.exports = mongoose.model('User', UserSchema);
