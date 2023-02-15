@@ -29,9 +29,8 @@ app.use(xss());
 // routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/jobs', authenticateUser, jobsRouter);
-
-// serve index.html
 app.get('*', (req, res) => {
+  // React application will take over
   res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
 });
 
