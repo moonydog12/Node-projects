@@ -3,9 +3,56 @@ const { StatusCodes } = require('http-status-codes');
 const { BadRequestError, NotFoundError } = require('../errors');
 
 const getAllJobs = async (req, res) => {
-  const jobs = await Job.find({ createdBy: req.user.userId }).sort('createdAt');
-  res.status(StatusCodes.OK).json({ jobs, count: jobs.length });
+  const { search, status, jobType, sort } = req.query;
+
+  const queryObject = {
+    createdBy: req.user.userId,
+  };
+
+  // search input
+  if (search) {
+    queryObject.position = { $regex: search, $options: 'i' };
+  }
+
+  // status & jobType
+  if (status && status !== 'all') {
+    queryObject.status = status;
+  }
+  if (jobType && jobType !== 'all') {
+    queryObject.jobType = jobType;
+  }
+
+  let result = Job.find(queryObject);
+
+  // chain sort conditions
+  if (sort === 'latest') {
+    result = result.sort('-createdAt');
+  }
+  if (sort === 'oldest') {
+    result = result.sort('createdAt');
+  }
+  if (sort === 'a-z') {
+    result = result.sort('position');
+  }
+  if (sort === 'z-a') {
+    result = result.sort('-position');
+  }
+
+  // setup pagination
+  const page = +req.query.page || 1;
+  const limit = +req.query.limit || 10;
+  const skip = (page - 1) * limit;
+  result = result.skip(skip).limit(limit);
+
+  const jobs = await result;
+  
+  // 計算此筆query的資料量
+  const totalJobs = await Job.countDocuments(queryObject);
+  const numOfPages = Math.ceil(totalJobs / limit);
+
+  res.status(StatusCodes.OK).json({ jobs, totalJobs, numOfPages });
 };
+
 const getJob = async (req, res) => {
   const {
     user: { userId },
