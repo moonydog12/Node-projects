@@ -5,7 +5,7 @@ const imageInputDOM = document.querySelector('#image');
 const containerDOM = document.querySelector('.container');
 
 const url = '/api/v1/products';
-let imageValue = null || 'uploads/dog1.jpg';
+let imageValue = null;
 
 const fetchProducts = async () => {
   try {
