@@ -11,5 +11,5 @@ const start = async () => {
     console.log(error);
   }
 };
-
+console.log('test');
 start();
