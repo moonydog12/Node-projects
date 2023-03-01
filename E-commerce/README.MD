@@ -82,15 +82,14 @@
 - [x] setup func attachCookiesToResponse
 - [x] accept payload(res, tokenUser)
 - [x] create token, setup cookie
-- [] optionally send back the response
+- [x] optionally send back the response
 
 #### Login Route
 
-- [] check if email and password exist, if one missing return 400
-- [] find user, if no user return 401
-- [] check password, if does not match return 401
-- [] if everything is correct, attach cookie
-  and send back the same response as in register
+- [x] check if email and password exist, if one missing return 400
+- [x] find user, if no user return 401
+- [x] check password, if does not match return 401
+- [x] if everything is correct, attach cookie and send back the same response as in register
 
 #### Logout Route
 
