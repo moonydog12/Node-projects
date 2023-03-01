@@ -13,6 +13,9 @@ const morgan = require('morgan');
 // database
 const connectDB = require('./db/connect');
 
+// routers
+const authRouter = require('./routes/authRoutes');
+
 // middleware(會依據順序執行，因此須根據程式邏輯進行排列)
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
@@ -23,6 +26,8 @@ app.use(express.json()); // 事先允許 all routes接收 json 格式資料
 app.get('/', (req, res) => {
   res.send('e-commerce API');
 });
+
+app.use('/api/v1/auth', authRouter);
 
 app.use(notFoundMiddleware); // 處理無效路由
 app.use(errorHandlerMiddleware); // 處理路由擲出的錯誤
