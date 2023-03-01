@@ -31,9 +31,12 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
+// 在 userSchema 上建立 Pre middleware 將密碼在儲存(save)前處理
 UserSchema.pre('save', async function hashPassword() {
   // 加密密碼，不建議直接把密碼以明碼存到資料庫
   const salt = await bcrypt.genSalt(10);
+
+  // this 指向目前正被儲存的使用者 document
   this.password = await bcrypt.hash(this.password, salt);
 });
 

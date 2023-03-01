@@ -9,6 +9,7 @@ const app = express();
 
 // packages
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 
 // database
 const connectDB = require('./db/connect');
@@ -21,9 +22,15 @@ const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
 
 app.use(morgan('tiny'));
-app.use(express.json()); // 事先允許 all routes接收 json 格式資料
+app.use(express.json()); // automatically parse incoming json into object
+app.use(cookieParser(process.env.JWT_SECRET));
 
 app.get('/', (req, res) => {
+  res.send('e-commerce API');
+});
+
+app.get('/api/v1', (req, res) => {
+  console.log(req.signedCookies);
   res.send('e-commerce API');
 });
 
