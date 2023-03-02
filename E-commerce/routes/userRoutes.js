@@ -1,7 +1,10 @@
 const express = require('express');
 
 const router = express.Router();
-const { authenticateUser } = require('../middleware/authentication');
+const {
+  authenticateUser,
+  authorizePermissions,
+} = require('../middleware/authentication');
 
 const {
   getAllUsers,
@@ -11,7 +14,10 @@ const {
   updateUserPassword,
 } = require('../controllers/userController');
 
-router.route('/').get(authenticateUser, getAllUsers);
+// 需注意 middleware 執行順序，ex. 先執行會員認證(是否為會員)、再執行權限檢驗(是否為管理員)
+router
+  .route('/')
+  .get(authenticateUser, authorizePermissions('admin'), getAllUsers);
 router.route('/showMe').get(showCurrentUser);
 router.route('/updateUser').patch(updateUser);
 router.route('/updateUserPassword').patch(updateUserPassword);

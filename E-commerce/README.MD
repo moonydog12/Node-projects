@@ -119,11 +119,11 @@
 
 #### Authorize Permissions Setup
 
-- [] hardcode
+- [x] hardcode
 
 #### Authorize Permissions Complete
 
-- [] introduce params
+- [x] introduce params
 
 #### ShowCurrentUser
 

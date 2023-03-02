@@ -19,6 +19,19 @@ const authenticateUser = async (req, res, next) => {
   }
 };
 
+// note: 因為authorizePermission會在 middleware 被調用(invoked)，回傳一個新函式內含express所需參數 req,res,next
+// ，所以不會擲出錯誤
+const authorizePermissions = (...roles) => (req, res, next) => {
+  // 檢查 userToken 的 role 特性是否包含在 roles 陣列
+  if (!roles.includes(req.user.role)) {
+    throw new CustomError.UnauthorizedError(
+      'Unauthorized to access this route',
+    );
+  }
+  next();
+};
+
 module.exports = {
   authenticateUser,
+  authorizePermissions,
 };
