@@ -31,13 +31,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/v1', (req, res) => {
-  console.log(req.signedCookies);
   res.send('e-commerce API');
 });
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
-
 
 app.use(notFoundMiddleware); // 處理無效路由
 app.use(errorHandlerMiddleware); // 處理路由擲出的錯誤
