@@ -58,7 +58,14 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-  res.send('logout user');
+  // 移除使用者 cookie (用其他字串取代)
+  res.cookie('token', 'logout', {
+    httpOnly: true,
+
+    // Remove the cookie from the browser
+    expires: new Date(Date.now()),
+  });
+  res.status(StatusCodes.OK).json({ msg: 'user logged out!' });
 };
 
 module.exports = {
