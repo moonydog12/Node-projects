@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const User = require('../models/User');
 const CustomError = require('../errors');
-const { attachCookiesToResponse } = require('../utils');
+const { attachCookiesToResponse, createTokenUser } = require('../utils');
 
 const register = async (req, res) => {
   // 檢查 email 是否已經被註冊過
@@ -23,7 +23,7 @@ const register = async (req, res) => {
   });
 
   // 創造 token
-  const tokenUser = { name: user.name, userId: user._id, role: user.role };
+  const tokenUser = createTokenUser(user);
 
   // 把使用者 cookie 存入response並回傳
   attachCookiesToResponse({ res, user: tokenUser });
@@ -52,7 +52,7 @@ const login = async (req, res) => {
   }
 
   // 通過驗證後，附上 cookie 並回傳
-  const tokenUser = { name: user.name, userId: user._id, role: user.role };
+  const tokenUser = createTokenUser(user);
   attachCookiesToResponse({ res, user: tokenUser });
   res.status(StatusCodes.CREATED).json({ user: tokenUser });
 };

@@ -11,6 +11,7 @@ const authenticateUser = async (req, res, next) => {
   }
 
   try {
+    // 取得從 cookie 拿到的使用者資訊(payload)
     const { name, userId, role } = isTokenValid({ token }); // 解構 payload
     req.user = { name, userId, role };
     next();
