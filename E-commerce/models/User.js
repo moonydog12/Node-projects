@@ -33,6 +33,11 @@ const UserSchema = new mongoose.Schema({
 
 // 在 userSchema 上建立 Pre middleware 將密碼在儲存(save)前處理
 UserSchema.pre('save', async function hashPassword() {
+  // console.log(this.modifiedPaths()); // 印出目前被修改的欄位
+  // console.log(this.isModified('name')); // 印出參數名稱的欄位是否被修改(Boolean)
+  // 如果修改的欄位不是密碼，終止繼續執行(使用者不會因為更改非敏感資訊導致密碼被重新加密)
+  if (!this.isModified('password')) return;
+
   // 加密密碼，不建議直接把密碼以明碼存到資料庫
   const salt = await bcrypt.genSalt(10);
 
