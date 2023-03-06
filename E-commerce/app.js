@@ -17,6 +17,7 @@ const connectDB = require('./db/connect');
 // routers
 const authRouter = require('./routes/authRoutes');
 const userRouter = require('./routes/userRoutes');
+const productRouter = require('./routes/productRoutes');
 
 // middleware(會依據順序執行，因此須根據程式邏輯進行排列)
 const notFoundMiddleware = require('./middleware/not-found');
@@ -36,6 +37,7 @@ app.get('/api/v1', (req, res) => {
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/products', productRouter);
 
 app.use(notFoundMiddleware); // 處理無效路由
 app.use(errorHandlerMiddleware); // 處理路由擲出的錯誤

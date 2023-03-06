@@ -75,20 +75,3 @@ module.exports = {
   updateUser,
   updateUserPassword,
 };
-
-// 用 findOneAndUpdate 方式更新使用者
-// const updateUser = async (req, res) => {
-//   // 不含 role、password 因為不讓使用者隨意更動敏感資訊
-//   const { email, name } = req.body;
-//   if (!email || !name) {
-//     throw new CustomError.BadRequestError('Please provide all values');
-//   }
-//   const user = await User.findOneAndUpdate(
-//     { _id: req.user.userId },
-//     { email, name },
-//     { new: true, runValidators: true },
-//   );
-//   const tokenUser = createTokenUser(user);
-//   attachCookiesToResponse({ res, user: tokenUser });
-//   res.status(StatusCodes.OK).json({ user: tokenUser });
-// };
