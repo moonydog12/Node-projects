@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
+const path = require('path');
 const Product = require('../models/Product');
 const CustomError = require('../errors');
-const path = require('path');
 
 const createProduct = async (req, res) => {
   req.body.user = req.user.userId;
