@@ -65,6 +65,8 @@ const ProductSchema = new mongoose.Schema(
     },
   },
   // note: mongoose virtuals
+  // https://mongoosejs.com/docs/tutorials/virtuals.html
+  // virtual 是沒有被存在 MongoDB 的特性，被動態計算出來然後新增至 document
   {
     timestamps: true,
     toJSON: { virtuals: true },
@@ -77,6 +79,14 @@ ProductSchema.virtual('reviews', {
   localField: '_id',
   foreignField: 'product',
   justOne: false,
+});
+
+// Hook(Remove all reviews)
+// 在刪除該項 product 之前，先把對應 product id 的 reviews 全部刪掉
+// 在controller要使用 remove()才能觸發這個 hook function
+ProductSchema.pre('remove', async function removeAllReviews(next) {
+  await this.model('Review').deleteMany({ product: this._id });
+  next();
 });
 
 module.exports = mongoose.model('Product', ProductSchema);

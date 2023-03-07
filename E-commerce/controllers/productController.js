@@ -41,6 +41,8 @@ const deleteProduct = async (req, res) => {
   if (!product) {
     throw new CustomError.NotFoundError(`No product with id: ${productId}`);
   }
+
+  // 使用 remove() 才能觸發寫在 model的 pre remove hook function，刪除其對應的評論
   await product.remove();
   res.status(StatusCodes.OK).json({ msg: 'Success! Product removed' });
 };
