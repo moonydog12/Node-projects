@@ -65,11 +65,11 @@ ReviewSchema.statics.calculateAverageRating = async function (productId) {
   }
 };
 
-ReviewSchema.post('save', async function () {
+ReviewSchema.post('save', async function preSaveHook() {
   await this.constructor.calculateAverageRating(this.product);
 });
 
-ReviewSchema.post('remove', async function () {
+ReviewSchema.post('remove', async function preRemoveHook() {
   await this.constructor.calculateAverageRating(this.product);
 });
 
