@@ -1,5 +1,4 @@
 const express = require('express');
-const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Blog = require('./models/blog');
 
@@ -13,7 +12,7 @@ const app = express();
 // Connect to db
 mongoose
   .connect(process.env.dbURI)
-  .then((result) => {
+  .then(() => {
     // listen for requests
     app.listen(port, () => {
       console.log('Server listening on port 5000');
@@ -24,11 +23,13 @@ mongoose
 // register view engine
 app.set('view engine', 'ejs');
 
-// register 3rd party middleware
-app.use(morgan('dev'));
-
 // middleware & static files
 app.use(express.static('public'));
+app.use(
+  express.urlencoded({
+    extended: true,
+  }),
+);
 
 // routes
 app.get('/', (req, res) => {
@@ -46,6 +47,35 @@ app.get('/blogs/create', (req, res) => {
 app.get('/blogs', async (req, res) => {
   const blogs = await Blog.find({}).sort({ createdAt: -1 });
   res.render('index', { title: 'All Blogs', blogs });
+});
+
+app.post('/blogs', (req, res) => {
+  const blog = new Blog(req.body);
+  blog
+    .save()
+    .then(() => {
+      res.redirect('/blogs');
+    })
+    .catch((err) => console.log(err));
+});
+
+app.get('/blogs/:id', (req, res) => {
+  const { id } = req.params;
+  Blog.findById(id)
+    .then((result) => {
+      res.render('details', { blog: result, title: 'Blog Details' });
+    })
+    .catch((err) => console.log(err));
+});
+
+app.delete('/blogs/:id', (req, res) => {
+  const { id } = req.params;
+  Blog.findByIdAndDelete(id)
+    .then((result) => {
+      // send the redirect location to front-end
+      res.json({ redirect: '/blogs' });
+    })
+    .catch((err) => console.log(err));
 });
 
 // 404 pages(A catch route)
