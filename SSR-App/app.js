@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const Blog = require('./models/blog');
+const blogRoutes = require('./routes/blogRoutes');
 
 require('dotenv').config();
 
@@ -40,43 +40,8 @@ app.get('/about', (req, res) => {
   res.render('about', { title: 'About' });
 });
 
-app.get('/blogs/create', (req, res) => {
-  res.render('create', { title: 'Create a new blog' });
-});
-
-app.get('/blogs', async (req, res) => {
-  const blogs = await Blog.find({}).sort({ createdAt: -1 });
-  res.render('index', { title: 'All Blogs', blogs });
-});
-
-app.post('/blogs', (req, res) => {
-  const blog = new Blog(req.body);
-  blog
-    .save()
-    .then(() => {
-      res.redirect('/blogs');
-    })
-    .catch((err) => console.log(err));
-});
-
-app.get('/blogs/:id', (req, res) => {
-  const { id } = req.params;
-  Blog.findById(id)
-    .then((result) => {
-      res.render('details', { blog: result, title: 'Blog Details' });
-    })
-    .catch((err) => console.log(err));
-});
-
-app.delete('/blogs/:id', (req, res) => {
-  const { id } = req.params;
-  Blog.findByIdAndDelete(id)
-    .then((result) => {
-      // send the redirect location to front-end
-      res.json({ redirect: '/blogs' });
-    })
-    .catch((err) => console.log(err));
-});
+// blog routes
+app.use('/blogs', blogRoutes);
 
 // 404 pages(A catch route)
 app.use((req, res) => {

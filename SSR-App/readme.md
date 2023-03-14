@@ -24,3 +24,9 @@ Middleware in Node.js refers to functions that can be used to intercept and proc
 
 - Schema defines the structure of a type of data / document - Properties & property types
 - Models allow us to communicate with database collections(get,save,delete,etc)
+
+## MVC Basics
+
+- Stands for Model,View,Controller
+- MVC is a way of structuring our code & files
+- Keeps code more modular,reusable & easier to read
