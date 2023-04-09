@@ -3,10 +3,10 @@ const blogControllers = require('../controllers/blogController');
 
 const router = express.Router();
 
-router.get('/', blogControllers.blog_index);
-router.post('/', blogControllers.blog_create_post);
-router.get('/create', blogControllers.blog_create_get);
-router.get('/:id', blogControllers.blog_details);
-router.delete('/:id', blogControllers.blog_delete);
+router.get('/', blogControllers.getAllBlogs);
+router.post('/', blogControllers.createBlogPost);
+router.get('/create', blogControllers.getBlogForm);
+router.get('/:id', blogControllers.getSingleBlog);
+router.delete('/:id', blogControllers.deleteBlogPost);
 
 module.exports = router;
