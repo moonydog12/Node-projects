@@ -1,5 +1,26 @@
 http://localhost:3000/users
 
 ###
-http://localhost:3000/users/3
+http://localhost:3000/users/1
 
+###
+POST http://localhost:3000/users/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "username":"Moonydog12",
+  "bio":"I am a cookie"
+}
+
+###
+PUT http://localhost:3000/users/1 HTTP/1.1
+Content-Type: application/json
+
+{
+  "username":"Halland",
+  "bio":"I am demon football player"
+}
+
+###
+DELETE  http://localhost:3000/users/2 HTTP/1.1
+Content-Type: application/json

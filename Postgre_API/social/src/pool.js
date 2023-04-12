@@ -14,17 +14,9 @@ class Pool {
     return this._pool.end();
   }
 
-  query(sql) {
-    return this._pool.query(sql);
+  query(sql, params) {
+    return this._pool.query(sql, params);
   }
 }
 
 module.exports = new Pool();
-
-// Normally, we would create a pool like this:
-// const pool = new pg.Pool({
-//   host: 'localhost',
-//   port: 5432,
-// });
-
-// module.exports = pool;
