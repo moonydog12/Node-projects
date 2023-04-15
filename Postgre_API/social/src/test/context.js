@@ -2,6 +2,16 @@ const { randomBytes } = require('crypto');
 const format = require('pg-format');
 const { default: migrate } = require('node-pg-migrate');
 const pool = require('../pool');
+require('dotenv').config({ path: __dirname + '/../../.env' });
+console.log(process.env.DBpassword);
+
+const DEFAULT_OPTIONS = {
+  host: 'localhost',
+  port: 5432,
+  database: 'socialnetwork-test',
+  user: 'postgres',
+  password: process.env.DBpassword,
+};
 
 class Context {
   static async build() {
@@ -9,13 +19,7 @@ class Context {
     const roleName = 'a' + randomBytes(4).toString('hex');
 
     // Connect to PG as usual
-    await pool.connect({
-      host: 'localhost',
-      port: 5432,
-      database: 'socialnetwork-test',
-      user: 'postgres',
-      password: process.env.DBpassword,
-    });
+    await pool.connect(DEFAULT_OPTIONS);
 
     // Create a new role
     await pool.query(
@@ -64,6 +68,22 @@ class Context {
 
   constructor(roleName) {
     this.roleName = roleName;
+  }
+
+  // Delete the role which was created for testing
+  async close() {
+    // Disconnect from PG
+    await pool.close();
+
+    // Reconnect as our root user
+    await pool.connect(DEFAULT_OPTIONS);
+
+    // Delete the role and schema we created
+    await pool.query(format('DROP SCHEMA %I CASCADE;', this.roleName));
+    await pool.query(format('DROP ROLE %I', this.roleName));
+
+    // Disconnect
+    await pool.close();
   }
 }
 

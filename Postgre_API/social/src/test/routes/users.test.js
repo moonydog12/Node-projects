@@ -4,16 +4,16 @@ const UserRepo = require('../../repos/user-repo');
 const pool = require('../../pool');
 const Context = require('../context');
 
-require('dotenv').config({ path: __dirname + '/./../../../.env' });
 
 // Connect the server before testing
+let context;
 beforeAll(async () => {
-  const context = await Context.build();
+  context = await Context.build();
 });
 
 // Disconnect the server after the test
 afterAll(() => {
-  return pool.close();
+  return context.close();
 });
 
 it('create a user', async () => {
