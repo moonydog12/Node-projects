@@ -3,7 +3,6 @@ const format = require('pg-format');
 const { default: migrate } = require('node-pg-migrate');
 const pool = require('../pool');
 require('dotenv').config({ path: __dirname + '/../../.env' });
-console.log(process.env.DBpassword);
 
 const DEFAULT_OPTIONS = {
   host: 'localhost',
@@ -68,6 +67,10 @@ class Context {
 
   constructor(roleName) {
     this.roleName = roleName;
+  }
+
+  async reset() {
+    return pool.query(`DELETE FROM users;`);
   }
 
   // Delete the role which was created for testing

@@ -4,11 +4,16 @@ const UserRepo = require('../../repos/user-repo');
 const pool = require('../../pool');
 const Context = require('../context');
 
-
 // Connect the server before testing
 let context;
 beforeAll(async () => {
   context = await Context.build();
+});
+
+// Delete all the different rows in different tables
+// before each test inside of this file
+beforeEach(async () => {
+  await context.reset();
 });
 
 // Disconnect the server after the test

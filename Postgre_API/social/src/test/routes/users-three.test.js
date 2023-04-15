@@ -1,23 +1,17 @@
 const request = require('supertest');
 const buildApp = require('../../app');
 const UserRepo = require('../../repos/user-repo');
-const pool = require('../../pool');
-require('dotenv').config({ path: __dirname + '/./../../../.env' });
+const Context = require('../context');
 
-// 開始測試前先連上server
-beforeAll(() => {
-  return pool.connect({
-    host: 'localhost',
-    port: 5432,
-    database: 'socialnetwork-test',
-    user: 'postgres',
-    password: process.env.DBpassword,
-  });
+// Connect the server before testing
+let context;
+beforeAll(async () => {
+  context = await Context.build();
 });
 
-// 完成測試後將server斷線
+// Disconnect the server after the test
 afterAll(() => {
-  return pool.close();
+  return context.close();
 });
 
 it('create a user', async () => {
