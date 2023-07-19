@@ -28,6 +28,8 @@ const UserSchema = new mongoose.Schema({
     enum: ['admin', 'user'],
     default: 'user',
   },
+
+  // new property for auth workflow
   verificationToken: String,
   isVerified: {
     type: Boolean,
